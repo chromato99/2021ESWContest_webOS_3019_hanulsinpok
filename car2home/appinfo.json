@@ -9,6 +9,6 @@
   "requiredPermissions": [
     "time.query",
     "activity.operation",
-    "car2home"
+    "com.hanulsinpok.app.car2home.service"
   ]
 }
