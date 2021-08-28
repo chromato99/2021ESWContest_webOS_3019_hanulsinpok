@@ -1,0 +1,14 @@
+{
+  "id": "com.hanulsinpok.app.car2home",
+  "version": "0.1.0",
+  "vendor": "My Company",
+  "type": "web",
+  "main": "index.html",
+  "title": "car2home-habulsinpok",
+  "icon": "icon.png",
+  "requiredPermissions": [
+    "time.query",
+    "activity.operation",
+    "car2home"
+  ]
+}

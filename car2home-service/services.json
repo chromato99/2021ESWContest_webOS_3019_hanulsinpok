@@ -1,0 +1,9 @@
+{
+  "id": "com.hanulsinpok.app.car2home.service",
+  "description": "Car2Home Service",
+  "services": [
+    {
+      "name": "com.hanulsinpok.app.car2home.service"
+    }
+  ]
+}

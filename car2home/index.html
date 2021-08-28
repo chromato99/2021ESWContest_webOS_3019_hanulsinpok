@@ -1,0 +1,84 @@
+<!--
+Copyright (c) 2020 LG Electronics Inc.
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Example Web App</title>
+<style type="text/css">
+    body {
+        background-color:#202020;
+    }
+    h1 {
+        vertical-align: middle;
+        text-align:center;
+        color:#FFFFFF;
+    }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+    var bridge = new WebOSServiceBridge();
+    /*
+     *  getTimeApi calls gettime of systemservice, a module in the platform.
+     */
+    var getTimeApi = 'luna://com.webos.service.systemservice/clock/getTime';
+    var getTimeParams = '{}';
+
+    /*
+     *  helloApi calls the hello method of js_service template provided by CLI.
+     *  In this case, the service name is used as default name "com.domain.app.service" is.
+     *  If you change this service name, you need to change the service name of the following API.
+     *
+     *  If you change the name to helloparmas as you want, the contents will be reflected on the screen.
+     */
+    
+    function getTime_callback(msg){
+        var arg = JSON.parse(msg);
+        if (arg.returnValue) {
+            console.log("[APP_NAME: example web app] GETTIME_SUCCESS UTC : " + arg.utc);
+            //webOSSystem.PmLogString(6, "GETTIME_SUCCESS", '{"APP_NAME": "example web app"}', "UTC : " + arg.utc);
+        }
+        else {
+            console.error("[APP_NAME: example web app] GETTIME_FAILED errorText : " + arg.errorText);
+            //webOSSystem.PmLogString(3, "GETTIME_FAILED", '{"APP_NAME": "example web app"}', "errorText : " + arg.errorText);
+        }
+    }
+
+
+    var turnOnApi = 'luna://com.hanulsinpok.app.service/turnOn';
+    var turnOnParams = '';
+    function turnOn_callback(msg){
+        var arg = JSON.parse(msg);
+        if (arg.returnValue) {
+            document.getElementById(arg.device_name + "button").innerHTML = arg.device_name + ": On";
+            console.log("[APP_NAME: car2home] CALL_TURN_ON_SUCCESS response : " + arg.response);
+            //webOSSystem.PmLogString(6, "CALLHELLO_SUCCESS", '{"APP_NAME": "example web app"}', "response : " + arg.Response);
+        }
+        else {
+            console.error("[APP_NAME: car2home] CALL_TURN_ON_FAILED errorText : " + arg.error);
+            //webOSSystem.PmLogString(3, "CALLHELLO_FAILED", '{"APP_NAME": "example web app"}', "errorText : " + arg.errorText);
+        }
+    }
+
+    bridge.onservicecallback = getTime_callback;
+    bridge.call(getTimeApi, getTimeParams);
+
+
+    document.getElementById("TV_button").onclick = function(e) {
+        turnOnParams = '{"device_name":"TV"}';
+        bridge.onservicecallback = turnOn_callback;
+        bridge.call(turnOnApi, turnOnParams);
+    };
+}
+</script>
+</head>
+<body>
+    <div>
+        <h1 id="txt_msg">Hello, Web Application!!</h1>
+        <button id="TV_button">TV : Off</button>
+    </div>
+</body>
+</html>
