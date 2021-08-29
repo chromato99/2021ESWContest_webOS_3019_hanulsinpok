@@ -10,13 +10,13 @@
 // eslint-disable-next-line import/no-unresolved
 const pkgInfo = require('./package.json');
 const Service = require('webos-service');
+const path = require('path');
+const GoogleAssistant = require('google-assistant');
 
 const service = new Service(pkgInfo.name); // Create service by service name on package.json
 const logHeader = "[" + pkgInfo.name + "]";
 let greeting = "Hello, World!";
 
-const path = require('path');
-const GoogleAssistant = require('google-assistant');
 
 const config = {
   auth: {
@@ -44,7 +44,7 @@ const startConversation = (conversation) => {
         if (error) {
           console.log('Conversation Ended Error:', error);
         } else if (continueConversation) {
-          promptForInput();
+          conversation.end();
         } else {
           console.log('Conversation Complete');
           conversation.end();
@@ -65,15 +65,42 @@ service.register("turnOn", function(message) {
 
     assistant
     .on('ready', () => {
-
         config.conversation.textQuery = "Turn on " + device_name + "!";
-        assistant.start(config.conversation, startConversation);
-        message.respond({
-        returnValue: true,
-        device_name: device_name,
-        response: "Turn On " + device_name + "!"
-        })
-    
+        assistant.start(config.conversation, (conversation) => {
+          // setup the conversation
+          conversation
+          .on('response', text => console.log('Assistant Response:', text))
+          .on('debug-info', info => console.log('Debug Info:', info))
+          // if we've requested a volume level change, get the percentage of the new level
+          .on('volume-percent', percent => console.log('New Volume Percent:', percent))
+          // the device needs to complete an action
+          .on('device-action', action => console.log('Device Action:', action))
+          // once the conversation is ended, see if we need to follow up
+          .on('ended', (error, continueConversation) => {
+            if (error) {
+              console.log('Conversation Ended Error:', error);
+            } else if (continueConversation) {
+              message.respond({
+                returnValue: true,
+                device_name: device_name,
+                response: "Turn On " + device_name + "!"
+                })
+              conversation.end();
+            } else {
+              console.log('Conversation Complete');
+              message.respond({
+                returnValue: true,
+                device_name: device_name,
+                response: "Turn On " + device_name + "!"
+                })
+              conversation.end();
+            }
+          })
+          // catch any errors
+          .on('error', (error) => {
+            console.log('Conversation Error:', error);
+          });
+        });
     })
     .on('error', (error) => {
       console.log('Assistant Error:', error);
