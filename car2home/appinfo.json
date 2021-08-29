@@ -8,7 +8,6 @@
   "icon": "icon.png",
   "requiredPermissions": [
     "time.query",
-    "activity.operation",
-    "com.hanulsinpok.app.car2home.service"
+    "activity.operation"
   ]
 }
