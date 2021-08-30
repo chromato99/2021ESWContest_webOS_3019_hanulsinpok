@@ -8,6 +8,9 @@
   "icon": "icon.png",
   "requiredPermissions": [
     "time.query",
-    "activity.operation"
+    "activity.operation",
+    "all",
+    "ai.management",
+    "ai.voice"
   ]
 }
