@@ -65,18 +65,19 @@ window.onload = function() {
 
     function assistant_callback(msg){
         var arg = JSON.parse(msg);
-        if(arg.response.partial) {
-            document.getElementById("txt_msg").innerHTML = arg.response.partial;
-            console.log("[APP_NAME: car2home] CALL_TURN_ON_SUCCESS response : " + arg.response.partial);
-        }
-        else if (arg.response.displayText) {
+        if (arg.response.displayText) {
             document.getElementById("txt_msg").innerHTML = arg.response.displayText;
             console.log("[APP_NAME: car2home] CALL_TURN_ON_SUCCESS response : " + arg.response.displayText);
             //webOSSystem.PmLogString(6, "CALLHELLO_SUCCESS", '{"APP_NAME": "example web app"}', "response : " + arg.Response);
         }
         else {
-            console.error("[APP_NAME: car2home] CALL_TURN_ON_FAILED errorText : " + arg);
-            //webOSSystem.PmLogString(3, "CALLHELLO_FAILED", '{"APP_NAME": "example web app"}', "errorText : " + arg.errorText);
+            if(arg.response.partial) {
+                document.getElementById("txt_msg").innerHTML = arg.response.partial;
+                console.log("[APP_NAME: car2home] CALL_TURN_ON_SUCCESS response : " + arg.response.partial);
+            } else {
+                console.error("[APP_NAME: car2home] CALL_TURN_ON_FAILED errorText : " + arg);
+                //webOSSystem.PmLogString(3, "CALLHELLO_FAILED", '{"APP_NAME": "example web app"}', "errorText : " + arg.errorText);
+            }
         }
     }
 
