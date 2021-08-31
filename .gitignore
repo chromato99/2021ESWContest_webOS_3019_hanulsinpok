@@ -4,3 +4,4 @@ devicecredentials.json
 *.ipk
 *.vmdk
 *.txt
+token.json
