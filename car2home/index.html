@@ -17,6 +17,13 @@ SPDX-License-Identifier: Apache-2.0
         vertical-align: middle;
         text-align:center;
     }
+    #txt_msg {
+        margin-left: 100px;
+        margin-right: 100px;
+        font-size: larger;
+        display: block;
+        float: left;
+    }
 </style>
 <script type="text/javascript">
 window.onload = function() {
@@ -66,13 +73,13 @@ window.onload = function() {
     function assistant_callback(msg){
         var arg = JSON.parse(msg);
         if (arg.response.displayText) {
-            document.getElementById("txt_msg").innerHTML = arg.response.displayText;
+            document.getElementById("txt_msg").innerHTML += arg.response.displayText;
             console.log("[APP_NAME: car2home] CALL_TURN_ON_SUCCESS response : " + arg.response.displayText);
             //webOSSystem.PmLogString(6, "CALLHELLO_SUCCESS", '{"APP_NAME": "example web app"}', "response : " + arg.Response);
         }
         else {
             if(arg.response.partial) {
-                document.getElementById("txt_msg").innerHTML = arg.response.partial;
+                document.getElementById("txt_msg").innerHTML += arg.response.partial;
                 console.log("[APP_NAME: car2home] CALL_TURN_ON_SUCCESS response : " + arg.response.partial);
             } else {
                 console.error("[APP_NAME: car2home] CALL_TURN_ON_FAILED errorText : " + arg);
@@ -140,15 +147,16 @@ window.onload = function() {
 </head>
 <body>
     <div>
-        <h1 id="txt_msg">Hello, Web Application!!</h1>
-        <button id="TV_button">TV : Off</button>
+        <h1 id="titlename">Car2Home</h1>
+        <!-- <button id="TV_button">TV : Off</button> -->
     </div>
     <iframe id="IoT Frame"
     title="IoT Frame"
     width="100%"
     height="800px"
     src="http://192.168.219.108:8123"></iframe>
-    <form>
+    <textarea id='txt_msg' rows="7" cols="50"></textarea>
+    <form style='display: block; font-size: larger;'>
         <!-- 서버로 메시지를 보낼 텍스트 박스 -->
         <input id="textMessage" type="text">
         <!-- 전송 버튼 -->
@@ -158,6 +166,6 @@ window.onload = function() {
         </form>
         <br />
         <!-- 출력 area -->
-        <textarea id="messageTextArea" rows="10" cols="50"></textarea>
+        <textarea id="messageTextArea" rows="5" cols="50"></textarea>
 </body>
 </html>
