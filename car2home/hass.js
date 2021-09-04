@@ -3,7 +3,7 @@ import {
     createConnection,
     subscribeEntities,
     createLongLivedTokenAuth,
-} from "index.js";
+} from "./lib/index.js";
 
 const token = require('./token.json');
 (async () => {
